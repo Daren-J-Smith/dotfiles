@@ -17,3 +17,20 @@ Brewfile.lock.json
 # org-roam
 org-roam.db
 .git/COMMIT_EDITMSG~
+# Secrets / env
+.env
+*.env
+.localrc.*
+# Keys and credentials
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+.netrc
+.pgpass
+**/credentials
+# Shell caches / history
+.zsh_history
+.zcompdump*

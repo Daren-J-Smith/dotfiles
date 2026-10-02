@@ -1,2 +1,2 @@
-# use VS Code as the system editor
-export EDITOR='code'
+# use vim as the system editor
+export EDITOR='vim'
