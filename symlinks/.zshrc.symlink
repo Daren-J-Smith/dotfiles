@@ -1,7 +1,13 @@
+
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+
 # If profiling is enabled, collect timing information
 if [ ! -z "$ZSH_PROF" ]; then
   zmodload zsh/zprof
 fi
+
+unset MallocStackLogging MallocStackLoggingNoCompact
 
 # Enable CLI colors (https://geoff.greer.fm/lscolors/)
 export CLICOLOR=true
@@ -35,7 +41,7 @@ export MANPATH="$BREW_PREFIX/man:$BREW_PREFIX/mysql/man:$BREW_PREFIX/git/man:$MA
 
 # load functions
 fpath=($DOTFILES/functions $fpath)
-autoload -U compinit
+autoload -Uz compinit
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 autoload -U $DOTFILES/functions/*(:t)
@@ -46,7 +52,7 @@ if type brew &>/dev/null; then
 fi
 
 # Setup completion
-compinit
+compinit -u
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # match lowercase as case-insensitive
 # zstyle ':completion:*' insert-tab pending # pasted tabs don't trigger completion
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # set file completion suggestions to ls colors
@@ -163,3 +169,42 @@ vterm_printf() {
         printf "\e]%s\e\\" "$1"
     fi
 }
+
+# --- Local environment (daren) ---
+[ -s "$HOME/.jabba/jabba.sh" ] && . "$HOME/.jabba/jabba.sh"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+export GPG_TTY=$(tty)
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="$PATH:$HOME/.gem/bin"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# Add docker to PATH
+export PATH="$PATH:$HOME/.docker/bin"
+
+if [[ $(arch) == "i386" ]]; then eval "$(/usr/local/bin/brew shellenv)"; fi
+
+export PATH="$HOME/Library/Python/$(python3 -V | cut -d" " -f2 | cut -d"." -f1-2)/bin:$PATH"
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Load secrets and credentials from keychain-backed .env
+[[ -f "$HOME/.env" ]] && source "$HOME/.env"
+
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=($HOME/.docker/completions $fpath)
+autoload -Uz compinit
+(( ${+_comps[docker]} )) || compinit
+# End of Docker CLI completions

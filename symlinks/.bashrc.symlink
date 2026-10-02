@@ -1,3 +1,7 @@
+
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/bashrc.pre.bash" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/bashrc.pre.bash"
+
 # OSX
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -10,10 +14,6 @@ fi
 # https://unix.stackexchange.com/questions/124444/how-can-i-cleanly-add-to-path
 +prepend_path() { case ":${PATH:=$1}:" in *:"$1":*) ;; *) PATH="$1:$PATH" ;; esac; }
 +append_path()  { case ":${PATH:=$1}:" in *:"$1":*) ;; *) PATH="$PATH:$1" ;; esac; }
-
-# ASDF
-# https://asdf-vm.com/#/core-manage-asdf
-source $(brew --prefix asdf)/asdf.sh
 
 # Brew
 BREW_PREFIX=$(brew --prefix)
@@ -127,6 +127,13 @@ export CONDA_AUTO_ACTIVATE_BASE=false
 
 export PATH
 
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/rromans/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+[ -s "$HOME/.jabba/jabba.sh" ] && source "$HOME/.jabba/jabba.sh"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="$PATH:$HOME/.gem/bin"
+
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/bashrc.post.bash" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/bashrc.post.bash"
