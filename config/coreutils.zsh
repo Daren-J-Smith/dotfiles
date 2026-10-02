@@ -1,5 +1,8 @@
 # Colorize common tools with grc
 if (( $+commands[grc] )) && (( $+commands[brew] )); then
+  # grc 1.13 (latest release) calls os.fork(); Python 3.14 warns about
+  # forking a multi-threaded process. Hide just that warning class.
+  export PYTHONWARNINGS="ignore::DeprecationWarning"
   source `brew --prefix`/etc/grc.zsh
 fi
 
